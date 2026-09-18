@@ -59,6 +59,7 @@ WIKI_STRUCTURE: list[tuple[str, list[tuple[str, str]]]] = [
         ("04-guias-desarrollo/testing.qmd", "Desarrollo-Testing"),
         ("04-guias-desarrollo/troubleshooting.qmd", "Desarrollo-Troubleshooting"),
         ("04-guias-desarrollo/agregar-documentacion-wiki.qmd", "Desarrollo-Wiki"),
+        ("04-guias-desarrollo/guia-estlo-python.qmd", "Desarrollo-Guia-Estilo-Python"),
     ]),
     ("Decisiones técnicas (ADRs)", [
         ("05-decisiones-tecnicas/index.qmd", "ADRs"),
