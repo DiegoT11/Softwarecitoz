@@ -1,0 +1,111 @@
+---
+title: "Spike: Selección de base de datos"
+---
+**Objetivo del spike:** Definir la base de datos del proyecto
+
+## 1. Identificar necesidades de almacenamiento
+
+Para el proyecto **Chaos** se requiere almacenar y consultar información relacionada con usuarios, perfiles, videojuegos, juegos de mesa, preferencias, horarios, coincidencias entre usuarios y comunicación.
+
+Entre las principales necesidades de almacenamiento se encuentran:
+
+* **Usuarios:** información necesaria para identificar y gestionar las cuentas.
+* **Perfiles:** preferencias, horarios disponibles y otra información utilizada por el sistema de matchmaking.
+* **Videojuegos:** información de juegos asociados a los usuarios.
+* **Datos provenientes de Steam:** biblioteca de juegos, actividad reciente, logros y estadísticas disponibles mediante su API.
+* **Juegos de mesa:** juegos agregados y asociados a los perfiles de los usuarios.
+* **Matchmaking:** relaciones entre usuarios y resultados de compatibilidad.
+* **Solicitudes y coincidencias:** usuarios que solicitan una conexión y coincidencias generadas por el sistema.
+* **Chat:** conversaciones y mensajes entre usuarios que hayan realizado una coincidencia.
+* **Información flexible:** algunos datos provenientes de APIs externas pueden tener estructuras variables, por lo que sería conveniente contar con soporte para datos semiestructurados.
+
+Además, el sistema tendrá que realizar consultas que relacionen diferentes tipos de información. Por ejemplo, el motor de matchmaking podría necesitar consultar simultáneamente las preferencias, horarios, juegos y coincidencias de usuarios.
+Por estas características, es importante utilizar una solución que permita manejar relaciones entre datos de forma consistente y realizar consultas complejas de manera eficiente.
+
+---
+
+## 2. Investigar diferentes alternativas
+
+Se consideraron principalmente dos enfoques para almacenar la información: bases de datos relacionales y bases de datos no relacionales.
+
+### 2.1 Bases de datos relacionales
+
+Las bases de datos relacionales organizan la información en tablas y permiten establecer relaciones entre ellas mediante claves.
+Entre las alternativas consideradas se encuentran:
+
+* PostgreSQL
+* MySQL
+* Supabase
+
+Este enfoque resulta adecuado cuando existen muchas relaciones entre diferentes entidades y se requieren consultas que involucren múltiples tablas.
+
+### 2.2 Bases de datos no relacionales
+
+También se consideraron alternativas como MongoDB.
+MongoDB almacena información utilizando documentos, lo que permite trabajar con estructuras más flexibles y datos que no necesariamente tienen la misma forma.
+Este enfoque puede resultar conveniente cuando los datos cambian frecuentemente de estructura o cuando se desea almacenar documentos completos sin dividirlos necesariamente en varias tablas.
+
+---
+
+## 3. Comparar las opciones
+
+Las principales alternativas se compararon considerando las necesidades del proyecto.
+
+| Criterio                               | `PostgreSQL`                       | `MySQL`                            | `MongoDB`                                              | `Supabase`                |
+| -------------------------------------- | -------------------------------- | -------------------------------- | ---------------------------------------------------- | ----------------------- |
+| Relaciones entre datos                 | Excelente                        | Excelente                        | Buena, pero diferente al modelo relacional           | Excelente               |
+| Consultas complejas                    | Excelente                        | Excelente                        | Buena                                                | Excelente               |
+| Integridad referencial                 | Sí                               | Sí                               | Manejo diferente                                     | Sí                      |
+| Datos semiestructurados                | Sí                               | Sí                               | Nativo                                               | Sí |
+| Autenticación integrada                | No                               | No                               | No como función principal                            | Sí                      |
+| OAuth                                  | Requiere implementación externa  | Requiere implementación externa  | Requiere implementación externa                      | Integrado               |
+| Funciones en tiempo real               | Requiere componentes adicionales | Requiere componentes adicionales | Disponible mediante servicios/arquitectura adicional | Integrado               |
+| Facilidad de integración web           | Alta                             | Alta                             | Alta                                                 | Alta                    |
+| Adecuación para matchmaking relacional | Alta                             | Alta                             | Media                                                | Alta                    |
+
+### Análisis
+
+**MongoDB** ofrece una estructura flexible y puede ser útil para datos con esquemas variables. Sin embargo, Chaos depende de numerosas relaciones entre usuarios, juegos, preferencias, horarios, coincidencias y mensajes. El modelo relacional resulta más natural para este tipo de información.
+
+**MySQL** también sería una alternativa viable debido a su soporte para relaciones, SQL y transacciones. Sin embargo, no proporciona por sí mismo los servicios adicionales de autenticación, OAuth y funcionalidades en tiempo real que pueden ser útiles para el proyecto.
+
+**PostgreSQL** cubre adecuadamente las necesidades de almacenamiento y consulta del proyecto. Además, su soporte para `JSONB` permite manejar información semiestructurada cuando sea necesario.
+
+**Supabase** Tiene todas las ventajas del PostgreSQL nativo, y además añade sobre esta base una gran cantidad de funcionalidades 
+
+---
+
+## 4. Seleccionar la alternativa más apropiada
+
+La alternativa seleccionada para el proyecto es **Supabase utilizando PostgreSQL como motor de base de datos**.
+
+La decisión se basa principalmente en que Chaos necesita manejar una cantidad considerable de relaciones entre diferentes tipos de información. PostgreSQL proporciona las características necesarias para mantener estas relaciones y realizar las consultas requeridas por el sistema de matchmaking.
+Además, Supabase proporciona servicios adicionales que coinciden con otros requisitos del proyecto, como:
+
+* Registro y autenticación de usuarios.
+* Integración con OAuth.
+* APIs para acceder a la información almacenada.
+* Funcionalidades de actualización en tiempo real que pueden ser útiles para el chat.
+* PostgreSQL como sistema de base de datos.
+
+Por lo tanto, se utilizará **PostgreSQL como tecnología de base de datos y Supabase como plataforma de servicios para interactuar con ella**.
+
+### Decisión final
+
+> **Base de datos:** Supabase
+
+Esta decisión podrá revisarse posteriormente si durante el desarrollo aparecen requisitos que no puedan resolverse adecuadamente con esta arquitectura.
+
+## Conclusión
+
+Después de analizar las necesidades de almacenamiento de Chaos y comparar diferentes alternativas, se determinó que una solución basada en PostgreSQL es la más adecuada debido a la cantidad de relaciones existentes entre los datos del sistema.
+La utilización de Supabase sobre PostgreSQL permite complementar la base de datos con servicios de autenticación, OAuth, APIs y funcionalidades en tiempo real, reduciendo la cantidad de infraestructura que el equipo necesita implementar directamente.
+El diseño detallado de las tablas, relaciones y demás elementos de la base de datos se realizará posteriormente en la sección correspondiente al **diseño del sistema**.
+
+## Fuentes consultadas
+| Base de datos | Documentación oficial |
+|---|---|
+| MongoDB | https://www.mongodb.com/es/docs/ |
+| MySQL | https://dev.mysql.com/doc/ |
+| PostgreSQL | https://www.postgresql.org/docs/ | 
+| Supabase | https://supabase.com/docs |
