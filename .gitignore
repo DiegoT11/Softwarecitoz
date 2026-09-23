@@ -3,3 +3,8 @@ docs/_site/
 docs/.quarto/
 .DS_Store
 __pycache__/
+
+# Python / entornos
+.venv/
+.env
+.pytest_cache/

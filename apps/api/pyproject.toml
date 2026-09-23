@@ -1,0 +1,26 @@
+[project]
+name = "chaos-api"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.140,<0.150",
+    "httpx>=0.28,<0.29",
+    "pydantic>=2.13,<2.14",
+    "pydantic-settings>=2.0",
+    "uvicorn[standard]>=0.30,<0.40",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "respx>=0.23.1",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
